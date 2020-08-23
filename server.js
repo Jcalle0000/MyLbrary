@@ -1,9 +1,10 @@
-// if(process.env.NODE_ENV!=='production'){
-//     // load diff dependenceis
-//     require('dotenv').parse()
-// }
 const dotenv=require('dotenv')
 dotenv.config()
+
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+  }
+
 
 const express=require('express')
 const app=express()
