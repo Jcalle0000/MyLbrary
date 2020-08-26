@@ -1,2 +1,0 @@
-start mongo from the command line: mongo
-start the application: npm run devStart
