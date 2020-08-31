@@ -13,8 +13,8 @@ const bodyParser=require('body-parser')
 
 // Main page
 const indexRouter=require('./routes/index') 
-
 const authorRouter=require('./routes/authors')
+const bookRouter=require('./routes/books')
 
 app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views') // i dont think this is needed - view engine should already take care of this?
@@ -34,5 +34,6 @@ db.once('open', ()=>  console.log("Connected to Mongoose") )
 
 app.use('/',indexRouter) // Main Page
 app.use('/authors',authorRouter) // Author Page
+app.use('/books', bookRouter)
 
 app.listen(process.env.PORT || 3000)

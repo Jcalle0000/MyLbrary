@@ -34,7 +34,6 @@ router.post('/', async (req,res)=>{
         const newAuthor=await author.save()
         console.log(author.name+" was saved")
         res.redirect(`authors`) 
-        //localhost:3000/authors
     } catch{
         console.log("There was an error creating author")
         let locals={errorMessage:`Author-Profile was not created`}
