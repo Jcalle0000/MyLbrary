@@ -21,6 +21,7 @@ app.set('views', __dirname + '/views') // i dont think this is needed - view eng
 app.set('layout', 'layouts/layout') // Main page is here
 app.use(expressLayouts)
 app.use(express.static('public') )
+
 app.use(bodyParser.urlencoded({
   limit:'10mb', 
   extended:false
@@ -37,3 +38,4 @@ app.use('/authors',authorRouter) // Author Page
 app.use('/books', bookRouter)
 
 app.listen(process.env.PORT || 3000)
+console.log(`3000`)
