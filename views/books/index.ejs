@@ -1,0 +1,25 @@
+<h2>Search Books</h2>
+<form action="/books" method="GET">
+    <div>
+        <label>Title</label>
+        <input type="text" name="title" value=  >
+        <button type="Submit">Search</button>
+    </div>
+    <div>
+        <label>Published After</label>
+        <input type="date" name="publishedAfter" value=  >
+        <button type="Submit">Search</button>
+    </div>
+    <div>
+        <label>Published Before</label>
+        <input type="date" name="publishedBefore" value=  >
+        <button type="Submit">Search</button>
+    </div>
+</form>
+<br>
+<% books.forEach(book=>{
+    %> 
+       BookTitle: <div> <%= book.title %> </div> " ," Author: <div> <%= book.author %> </div>         
+    <%})
+ %> 
+
