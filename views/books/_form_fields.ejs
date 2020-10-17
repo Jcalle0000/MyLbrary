@@ -16,7 +16,10 @@
 </div>   
 <div>
     <label>Publish Date:</label>
-    <input type="date" name="publishDate" value= "<%=book.publishDate %>" >
+    <input type="date" name="publishDate" 
+            value= "<%= book.publishDate==null? '':
+                        book.publishDate.toISOString().split('T')[0] %>" >
+                        <!-- 2020-10-11T1:33 -->
 </div>
 <div>
     <label>Page Count</label>

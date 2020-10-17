@@ -1,7 +1,7 @@
 const mongoose=require('mongoose')
 const path=require('path')
 
-const coverImageBasePath='uploads/BookCovers'
+const coverImageBasePath='uploads/bookCovers' // this was the error 'uploads/BookCovers' prev
 
 const bookSchema=new mongoose.Schema({
     title:{

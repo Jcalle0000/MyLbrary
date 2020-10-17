@@ -20,7 +20,7 @@ app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views') // i dont think this is needed - view engine should already take care of this?
 app.set('layout', 'layouts/layout') // Main page is here
 app.use(expressLayouts)
-app.use(express.static('public') )
+app.use(express.static('public') ) // might not need this
 
 app.use(bodyParser.urlencoded({
   limit:'10mb', 
@@ -37,7 +37,7 @@ app.use('/',indexRouter) // Main Page
 app.use('/authors',authorRouter) // Author Page
 app.use('/books', bookRouter)
 
-app.listen(process.env.PORT || 3000)
-console.log(`3000`)
+app.listen(process.env.PORT || 3500)
+console.log(`3500- PDF-Lbrary`)
 
 
