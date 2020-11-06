@@ -3,32 +3,35 @@ const router=express.Router()
 const path= require('path')
 const Author=require('../models/author')
 const Book=require('../models/book')
+            // joins public folder with coverImageBasPath
+                                // coverImageBasePath = 'uploads/bookCovers'
 const uploadPath=path.join('public', Book.coverImageBasePath) // Book.coverImageBasePath returns null
 const imageMimeTypes=['image/jpeg ', 'image/png', 'images/gif']
 // middleware for handling form-data - primarily for uploading files
 // will not process any form thats not multi-part
 const multer = require('multer')
 
+// built into node
 const fs =require('fs') // allows us to delete covers linked
 
 // Issue has to be coming from here as the upload.single('cover is not working)
 // or issue is coming from multer
 
 const upload=multer({
-    dest: uploadPath,
+    dest: uploadPath, // destination - public/uploads/bookCovers
     fileFilter: (req,file, callback)=>{
         callback(null, imageMimeTypes.includes(file.mimetype) )
-
 
         if(file==null){
             console.log("ISSUE IS here")
         }
 
         if(file!=null){
-            console.log(file)
+            console.log("file " + file)
         }
 
         console.log("upload path "+ uploadPath )
+        // upload path is working and is consistent
     }    
 
     
@@ -78,12 +81,18 @@ router.get('/new', async (req,res)=>{
 
 // Create Book Route
 // async is needed since were using mongoose awaiting
+                    // UI file - cover
 router.post('/',  upload.single('cover'), async (req,res)=>{
     
-    console.log(req.file) // this is returning undefined
+    console.log()
+    // console.log(req.file) // this is returning undefined
 
+                    // req.file is from UI
     const fileName= req.file!=null? req.file.filename:null // not commented
+                                    // what is req.file.filename - part of req.file 
     // const fileName="nullForNow"
+    console.log("req.file " +req.file) // returns object object
+    // console.log("req.file.filename "+req.file.filename) // undefined - causes errror
 
     const book= new Book({
         title:req.body.title,
@@ -94,6 +103,8 @@ router.post('/',  upload.single('cover'), async (req,res)=>{
         coverImageName:fileName, // fileName is returning null b/c coverImageName
         description:req.body.description
     })
+    
+
     try{
         // console.log("before save")
         const newBook= await book.save() //was un commented
@@ -102,24 +113,22 @@ router.post('/',  upload.single('cover'), async (req,res)=>{
         // coverImageName is required
         // res.redirect(`books/${newBook.id}`)
         res.redirect(`books`)
-        console.log('Success')
+        console.log('Successfully created a book')
     } catch{
         // res.render('authors/new'), {
         //     author:author,
         //     errorMessage:'Error creating Author'
             console.log('There was an error creating a book')
-            
+            console.log( "book details " + book )
             console.log( "book.coverImageName "+book.coverImageName) // this is returning null
-            console.log("uploadPath "+ uploadPath)
-            // console.log("error.e ")
-            // console.error(e) // causing it to crash
-            // if(book.coverImageName!=null){ // if its not empty
-            //     removeBookCover(book.coverImageName)
-            // }
-            // renderNewPage(res, book,true)
-            // res.redirect(`books`, book) // this was not commented            
-            // this did not exist but we are sending ourselves the data
-            // res.redirect('/', book) // ths was not commented
+            
+            // in case we we create a book with specifying title etc
+            // we dont want to save a book thats not in the database
+
+            if(book.coverImageName!=null){ // basically if a coverImageName was made
+                removeBookCover(book.coverImageName) 
+            }
+            
             renderNewPage(res, book, true )
         }
         // renderNewPage(res, book,true)
@@ -127,18 +136,11 @@ router.post('/',  upload.single('cover'), async (req,res)=>{
     // res.send('Create Books')
 })
 
-// function removeBookCover(fileName){
-//     fs.unlink(path.join(uploadPath, fileName), err =>{
-//         if(err) console.log(err)
-//     })
-// }
-
-// book is being created with the id from mongodb
-// title is shown
-// author is connected to the id
-// publishDate is going through
-// however CoverImage:null - which is causing the error
-// 
+function removeBookCover(fileName){
+    fs.unlink(path.join(uploadPath, fileName), err =>{
+        if(err ) console.log(err)
+    })
+}
 
 async function renderNewPage(res, book, hasError=false){
     try{
@@ -146,7 +148,7 @@ async function renderNewPage(res, book, hasError=false){
         const authors=await Author.find({})
         const params={
             authors:authors,
-            book:book
+            book:book  // what abouut the description part or the images path
         } 
         if(hasError) params.errorMessage='Error creating Book'
         // if(hasError){
