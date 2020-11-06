@@ -9,9 +9,7 @@ const imageMimeTypes=['image/jpeg ', 'image/png', 'images/gif']
 // will not process any form thats not multi-part
 const multer = require('multer')
 
-
-
-const fs =require('fs')
+const fs =require('fs') // allows us to delete covers linked
 
 // Issue has to be coming from here as the upload.single('cover is not working)
 // or issue is coming from multer
@@ -31,7 +29,7 @@ const upload=multer({
         }
 
         console.log("upload path "+ uploadPath )
-    }
+    }    
 
     
 })
@@ -39,12 +37,12 @@ const upload=multer({
 // All Books route
 router.get('/', async (req,res)=>{
     // res.send('All Books')
-    
+  
     try{
-        const books= await Book.find({})
+        const books= await Book.find({}) // await is needed for the for loop
         res.render('books/index',{
             books:books,
-            searchParams:req.query                  
+            searchOptions:req.query                  
     }) } catch{
         res.redirect('/')
     }

@@ -22,6 +22,8 @@ router.get('/', async (req,res)=>{
 })
 // New Authors Route
 router.get('/new',(req,res)=>{
+
+    // authors 
     res.render('authors/new', {
         author:new Author()
     })
@@ -29,7 +31,9 @@ router.get('/new',(req,res)=>{
 
 //Create Author post // "/authors"
 router.post('/', async (req,res)=>{
-    const author=new Author({name:req.body.name})
+    const author=new Author({
+        name:req.body.name
+    })
     try{
         const newAuthor=await author.save()
         console.log(author.name+" was saved")
