@@ -37,9 +37,30 @@ const upload=multer({
 // All Books route
 router.get('/', async (req,res)=>{
     // res.send('All Books')
-  
+    // in order to use filtering options
+    let query=  Book.find() // has to be let as its changing 
+    if(req.query.title!=null && req.query.title!=''){ // title refers to the front end
+        
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+            // regex = regular expression 
+            // search, split, match metods 
+        query= query.regex('title' , new RegExp(req.query.title, 'i') ) // i is used so that uppercase or lcase has no affect
+    }
+
+    // published before
+    if(req.query.publishedBefore!=null && req.query.publishedBefore!=''){ // title refers to the front end
+        
+        query= query.lte('publishDate' , req.query.publishedBefore ) // i is used so that uppercase or lcase has no affect
+    }
+    // published after
+    if(req.query.publishedBefore!=null && req.query.publishedAfter!=''){ // title refers to the front end
+        
+        query= query.gte('publishDate' , req.query.publishedAfter ) // i is used so that uppercase or lcase has no affect
+    }
+
     try{
-        const books= await Book.find({}) // await is needed for the for loop
+        // const books= await Book.find({}) // await is needed for the for loop
+        const books= await query.exec() 
         res.render('books/index',{
             books:books,
             searchOptions:req.query                  

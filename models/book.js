@@ -1,5 +1,5 @@
 const mongoose=require('mongoose')
-const path=require('path')
+const path=require('path') 
 
 const coverImageBasePath='uploads/bookCovers' // this was the error 'uploads/BookCovers' prev
 
