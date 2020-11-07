@@ -66,7 +66,7 @@ router.get('/', async (req,res)=>{
         const books= await query.exec() 
         res.render('books/index',{
             books:books,
-            searchOptions:req.query                  
+            searchOptions:req.query  // SearchOptions is used name in the UI                
     }) } catch{
         res.redirect('/')
     }
