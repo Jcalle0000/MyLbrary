@@ -1,6 +1,7 @@
 We are posting from view: new to books routes
 <h2>New Book</h2>
-<form action="/books" method="POST" enctype="multipart/form-data">
+<!-- enctype multipart/form-data is not needed since were using filepond -->
+<form action="/books" method="POST" >
     <%- include('_form_fields') %>
     <a href="/books">Cancel</a>
     <button type ="submit">Create</button>

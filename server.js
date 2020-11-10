@@ -20,7 +20,7 @@ app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views') // i dont think this is needed - view engine should already take care of this?
 app.set('layout', 'layouts/layout') // Main page is here
 app.use(expressLayouts)
-app.use(express.static('public') ) // might not need this
+app.use(express.static('public') ) // js files
 
 app.use(bodyParser.urlencoded({
   limit:'10mb', 

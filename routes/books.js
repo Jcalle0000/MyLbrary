@@ -9,7 +9,8 @@ const uploadPath=path.join('public', Book.coverImageBasePath) // Book.coverImage
 const imageMimeTypes=['image/jpeg ', 'image/png', 'images/gif']
 // middleware for handling form-data - primarily for uploading files
 // will not process any form thats not multi-part
-const multer = require('multer')
+
+// const multer = require('multer') - uninstalled 
 
 // built into node
 const fs =require('fs') // allows us to delete covers linked
@@ -79,10 +80,12 @@ router.get('/new', async (req,res)=>{
     renderNewPage(res, new Book() )
 })
 
+// File Encoded is used so upload.single('cover') is not needed
+
 // Create Book Route
 // async is needed since were using mongoose awaiting
                     // UI file - cover
-router.post('/',  upload.single('cover'), async (req,res)=>{
+router.post('/', async (req,res)=>{
     
     console.log()
     // console.log(req.file) // this is returning undefined
