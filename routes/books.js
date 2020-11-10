@@ -1,11 +1,12 @@
 const express=require('express')
 const router=express.Router()
-const path= require('path')
+// const path= require('path')
 const Author=require('../models/author')
 const Book=require('../models/book')
             // joins public folder with coverImageBasPath
                                 // coverImageBasePath = 'uploads/bookCovers'
-const uploadPath=path.join('public', Book.coverImageBasePath) // Book.coverImageBasePath returns null
+// const up loadPath=path.join('public', Book.coverImageBasePath) // Book.coverImageBasePath returns null
+
 const imageMimeTypes=['image/jpeg ', 'image/png', 'images/gif']
 // middleware for handling form-data - primarily for uploading files
 // will not process any form thats not multi-part
@@ -13,30 +14,30 @@ const imageMimeTypes=['image/jpeg ', 'image/png', 'images/gif']
 // const multer = require('multer') - uninstalled 
 
 // built into node
-const fs =require('fs') // allows us to delete covers linked
+// const fs =require('fs') // allows us to delete covers linked
 
 // Issue has to be coming from here as the upload.single('cover is not working)
 // or issue is coming from multer
 
-const upload=multer({
-    dest: uploadPath, // destination - public/uploads/bookCovers
-    fileFilter: (req,file, callback)=>{
-        callback(null, imageMimeTypes.includes(file.mimetype) )
+// const upload=multer({
+//     dest: uploadPath, // destination - public/uploads/bookCovers
+//     fileFilter: (req,file, callback)=>{
+//         callback(null, imageMimeTypes.includes(file.mimetype) )
 
-        if(file==null){
-            console.log("ISSUE IS here")
-        }
+//         if(file==null){
+//             console.log("ISSUE IS here")
+//         }
 
-        if(file!=null){
-            console.log("file " + file)
-        }
+//         if(file!=null){
+//             console.log("file " + file)
+//         }
 
-        console.log("upload path "+ uploadPath )
-        // upload path is working and is consistent
-    }    
+//         console.log("upload path "+ uploadPath )
+//         // upload path is working and is consistent
+//     }    
 
     
-})
+// })
 
 // All Books route
 router.get('/', async (req,res)=>{
@@ -90,8 +91,9 @@ router.post('/', async (req,res)=>{
     console.log()
     // console.log(req.file) // this is returning undefined
 
+    // fileName is not needed due to filepond
                     // req.file is from UI
-    const fileName= req.file!=null? req.file.filename:null // not commented
+    // const fileName= req.file!=null? req.file.filename:null // not commented
                                     // what is req.file.filename - part of req.file 
     // const fileName="nullForNow"
     console.log("req.file " +req.file) // returns object object
@@ -103,10 +105,13 @@ router.post('/', async (req,res)=>{
         publishDate:new Date(req.body.publishDate), // req.body.publishDate returns a string
         // ned to turn that into an ISO string variable later on
         pageCount:req.body.pageCount,
-        coverImageName:fileName, // fileName is returning null b/c coverImageName
+        // taken care of by filePond
+        // coverImageName:fileName, // fileName is returning null b/c coverImageName
         description:req.body.description
     })
     
+    saveCover(book, req.body.cover)
+
 
     try{
         // console.log("before save")
@@ -118,9 +123,7 @@ router.post('/', async (req,res)=>{
         res.redirect(`books`)
         console.log('Successfully created a book')
     } catch{
-        // res.render('authors/new'), {
-        //     author:author,
-        //     errorMessage:'Error creating Author'
+        
             console.log('There was an error creating a book')
             console.log( "book details " + book )
             console.log( "book.coverImageName "+book.coverImageName) // this is returning null
@@ -128,22 +131,31 @@ router.post('/', async (req,res)=>{
             // in case we we create a book with specifying title etc
             // we dont want to save a book thats not in the database
 
-            if(book.coverImageName!=null){ // basically if a coverImageName was made
-                removeBookCover(book.coverImageName) 
-            }
+            // if(book.coverImageName!=null){ // basically if a coverImageName was made
+            //     removeBookCover(book.coverImageName) 
+            // }
             
             renderNewPage(res, book, true )
         }
-        // renderNewPage(res, book,true)
-    
-    // res.send('Create Books')
+       
 })
 
-function removeBookCover(fileName){
-    fs.unlink(path.join(uploadPath, fileName), err =>{
-        if(err ) console.log(err)
-    })
+function saveCover(book, coverEncoded){
+    // verify its valid
+    if(coverEncoded == null) return // dont do anything
+
+    const cover = JSON.parse(coverEncoded)
+    if(cover!=null && imageMimeTypes.includes(cover.type) ){
+        book.coverImage = new Buffer.from(cover.data,'base64')
+        book.coverImageType = cover.type
+    }
 }
+
+// function removeBookCover(fileName){
+//     fs.unlink(path.join(uploadPath, fileName), err =>{
+//         if(err ) console.log(err)
+//     })
+// }
 
 async function renderNewPage(res, book, hasError=false){
     try{
