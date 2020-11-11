@@ -17,6 +17,7 @@ router.get('/', async (req,res)=>{
             searchOptions:req.query
         }) // object of all authors
     } catch{
+        
         res.redirect("/")
     }
 })

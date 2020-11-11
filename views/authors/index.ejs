@@ -9,7 +9,7 @@
     obj.forEach(author=>{
     %> 
         <div> <%= author.name %> </div> 
-        <a href = "/authors/"<% obj.id %> > View author </a>
+        <a href = "/authors/<%= author.id %>" > View author </a>
     <%})
  %> 
 
