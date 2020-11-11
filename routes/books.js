@@ -1,3 +1,4 @@
+const e = require('express')
 const express=require('express')
 const router=express.Router()
 // const path= require('path')
@@ -88,7 +89,7 @@ router.get('/new', async (req,res)=>{
                     // UI file - cover
 router.post('/', async (req,res)=>{
     
-    console.log()
+    
     // console.log(req.file) // this is returning undefined
 
     // fileName is not needed due to filepond
@@ -96,7 +97,7 @@ router.post('/', async (req,res)=>{
     // const fileName= req.file!=null? req.file.filename:null // not commented
                                     // what is req.file.filename - part of req.file 
     // const fileName="nullForNow"
-    console.log("req.file " +req.file) // returns object object
+    // console.log("req.file " +req.file) // returns object object
     // console.log("req.file.filename "+req.file.filename) // undefined - causes errror
 
     const book= new Book({
@@ -110,14 +111,17 @@ router.post('/', async (req,res)=>{
         description:req.body.description
     })
     
+    // console.log("req.body.cover "+ req.body.cover)
     saveCover(book, req.body.cover)
 
 
     try{
         // console.log("before save")
-        const newBook= await book.save() //was un commented
-        
-        console.log('new Book saved ', newBook.coverImageName ) // did not have book.save()
+        const newBook= await book.save() 
+        console.log("newBook "+ newBook)
+
+        // console.log(book)
+        // console.log('new Book saved ', newBook.coverImageName ) // did not have book.save()
         // coverImageName is required
         // res.redirect(`books/${newBook.id}`)
         res.redirect(`books`)
@@ -126,7 +130,7 @@ router.post('/', async (req,res)=>{
         
             console.log('There was an error creating a book')
             console.log( "book details " + book )
-            console.log( "book.coverImageName "+book.coverImageName) // this is returning null
+            // console.log( "book.coverImageName "+book.coverImageName) // this is returning null
             
             // in case we we create a book with specifying title etc
             // we dont want to save a book thats not in the database
@@ -142,12 +146,19 @@ router.post('/', async (req,res)=>{
 
 function saveCover(book, coverEncoded){
     // verify its valid
-    if(coverEncoded == null) return // dont do anything
+    if(coverEncoded == null){
+        console.log("req.body.cover is " +null)
+        return // dont do anything
+    } 
 
     const cover = JSON.parse(coverEncoded)
+    console.log("cover "+cover)
+
     if(cover!=null && imageMimeTypes.includes(cover.type) ){
         book.coverImage = new Buffer.from(cover.data,'base64')
         book.coverImageType = cover.type
+    } else {
+        console.log("Could not save cover " + cover)
     }
 }
 

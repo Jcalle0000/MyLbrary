@@ -73,4 +73,10 @@ router.post('/', async (req,res)=>{
     }) */
 })
 
+router.get('/:id', (req,res)=>{
+    res.send('show author '+ req.params.id)
+})
+
+
+
 module.exports=router

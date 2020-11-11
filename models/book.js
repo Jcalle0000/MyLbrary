@@ -45,11 +45,14 @@ const bookSchema=new mongoose.Schema({
 
 bookSchema.virtual('coverImagePath').get( function(){
     if(this.coverImage !=null && this.coverImageType!=null ){
-        return `data:${this.coverImageType};charset=utf-8;base64,
-            ${this.coverImage.toString('base64')}`
+
+        return `data:${this.coverImageType};charset=utf-8;base64,${this.coverImage.toString('base64')}`
         // return path.join('/', coverImageBasePath, this.coverImageName)
                         // public/ uploads/bookCovers/ coverImageName
-    }
+    } 
+    // else {
+    //     console.log("theres an error")
+    // }
 })
 
 module.exports=mongoose.model('Book', bookSchema )
